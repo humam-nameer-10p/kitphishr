@@ -16,7 +16,6 @@ import (
 	"net/url"
 	"os"
 	"path"
-	"regexp"
 	"strings"
 	"sync"
 	"time"
@@ -406,13 +405,9 @@ func (r Response) SaveResponse() (string, error) {
 		return "", errors.New("The file was empty")
 	}
 
-	// generate a clean filename by dropping all non alphanumeric chars
-	// but do allow dots, so we at least get the file ext
-	reg, err := regexp.Compile("[^a-zA-Z0-9.]+")
-	if err != nil {
-		return "", err
-	}
-	filename := reg.ReplaceAllString(r.URL, "")
+	// generate and clean the filename based on the url
+	replacer := strings.NewReplacer("//", "__", "/", "_", ":", "", "&", "", ">", "", "<", "", " ", "_", ")", "", "(", "")
+	filename := replacer.Replace(r.URL)
 
 	parts := []string{defaultOutputDir}
 	parts = append(parts, filename)
