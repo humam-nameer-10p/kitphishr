@@ -1,4 +1,4 @@
-module github.com/JCyberSec/kitphishr
+module github.com/humam-nameer-10p/kitphishr
 
 go 1.20
 
